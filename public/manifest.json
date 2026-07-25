@@ -1,0 +1,16 @@
+{
+  "name": "Portal Tucumã Milgrau",
+  "short_name": "Tucumã Milgrau",
+  "description": "A notícia em tempo real de Tucumã e região sul do Pará.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#101010",
+  "theme_color": "#F97316",
+  "lang": "pt-BR",
+  "categories": ["news", "magazines"],
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

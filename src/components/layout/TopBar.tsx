@@ -1,0 +1,46 @@
+import LiveDateWeather from "./LiveDateWeather";
+
+export default function TopBar() {
+  return (
+    <div className="bg-support text-white font-menu text-[0.72rem]">
+      <div className="max-w-[1280px] mx-auto px-4 flex items-center justify-between gap-4 h-[34px] overflow-x-auto [scrollbar-width:none]">
+        <div className="flex items-center gap-3.5 whitespace-nowrap">
+          <LiveDateWeather />
+          <span className="opacity-90 flex items-center gap-1">💵 Dólar R$ 5,42</span>
+        </div>
+        <div className="flex items-center gap-3.5 whitespace-nowrap">
+          <div className="flex gap-2.5">
+            <a href="#" aria-label="Instagram" className="opacity-90 hover:text-primary hover:opacity-100">📸</a>
+            <a href="#" aria-label="Facebook" className="opacity-90 hover:text-primary hover:opacity-100">📘</a>
+            <a href="#" aria-label="YouTube" className="opacity-90 hover:text-primary hover:opacity-100">▶️</a>
+            <a href="#" aria-label="X" className="opacity-90 hover:text-primary hover:opacity-100">✖️</a>
+          </div>
+          <a
+            href="https://www.radio-ao-vivo.com/jovem-pan-brasilia"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="opacity-90 hover:text-primary hover:opacity-100"
+          >
+            📻 Rádio ao vivo
+          </a>
+          <a
+            href="https://wa.me/5562982282495?text=Ol%C3%A1%20%2C%20gostaria%20de%20fazer%20uma%20den%C3%BAncia%20ou%20tirar%20alguma%20d%C3%BAvida%20com%20o%20portal%20Tucum%C3%A3%20milgrau.%20"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-[#25D366] text-support px-2.5 py-1 rounded-full font-bold"
+          >
+            🟢 WhatsApp
+          </a>
+          <a
+            href="https://wa.me/5562982282495?text=Ol%C3%A1%20%2C%20gostaria%20de%20fazer%20uma%20den%C3%BAncia%20ou%20tirar%20alguma%20d%C3%BAvida%20com%20o%20portal%20Tucum%C3%A3%20milgrau.%20"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-alert text-white px-2.5 py-1 rounded-full font-bold"
+          >
+            🚨 Enviar Denúncia
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}

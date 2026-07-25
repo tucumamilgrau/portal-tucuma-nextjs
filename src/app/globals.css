@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #f97316;
+  --color-primary-dark: #c2590f;
+  --color-primary-light: #ffedd9;
+  --color-support: #101010;
+  --color-highlight: #2563eb;
+  --color-alert: #dc2626;
+}
+
+@theme inline {
+  --color-primary: var(--color-primary);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-primary-light: var(--color-primary-light);
+  --color-support: var(--color-support);
+  --color-highlight: var(--color-highlight);
+  --color-alert: var(--color-alert);
+
+  --font-title: var(--font-poppins), sans-serif;
+  --font-text: var(--font-inter), sans-serif;
+  --font-menu: var(--font-montserrat), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-text);
+  color: var(--color-support);
+  background: #fafafa;
+}
+
+/* Placeholder de imagem (protótipo sem gerador de IA conectado — ver IMAGENS-PROMPTS.md)
+   Envolvido em @layer components para que classes utilitárias do Tailwind (ex: w-[110px])
+   sempre tenham precedência sobre estes estilos base, independente da ordem no arquivo. */
+@layer components {
+  .img-ph {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--color-support) 0%, #2b2b2b 45%, var(--color-primary) 100%);
+    color: #fff;
+    isolation: isolate;
+  }
+  .img-ph::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.12), transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(37, 99, 235, 0.25), transparent 45%);
+    z-index: 0;
+  }
+  .img-ph::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.035) 0 2px, transparent 2px 8px);
+    z-index: 0;
+  }
+  .img-ph .ph-icon {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    font-size: 1.4rem;
+    opacity: 0.85;
+    z-index: 1;
+  }
+  .img-ph .ph-label {
+    position: relative;
+    z-index: 1;
+    font-family: var(--font-menu);
+    font-size: 0.65rem;
+    letter-spacing: 0.03em;
+    padding: 8px 10px;
+    background: rgba(16, 16, 16, 0.55);
+    backdrop-filter: blur(2px);
+    width: 100%;
+  }
+
+  .rank-num {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--color-primary-light);
+    -webkit-text-stroke: 1.5px var(--color-primary);
+  }
+}
