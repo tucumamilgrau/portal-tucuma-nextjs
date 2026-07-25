@@ -72,18 +72,6 @@ export default async function Home() {
           <div>
             <SectionHead title="Colunistas & Opinião" />
             <ColumnistsSection />
-
-            <div className="mt-9">
-              <SectionHead title="Editorial & Opinião" />
-              <div className="bg-white rounded-xl shadow-sm p-[18px]">
-                <p className="italic text-gray-600">
-                  &quot;A duplicação da PA-279 não é apenas uma obra de infraestrutura — é a artéria que conecta o
-                  desenvolvimento econômico de toda a região sul do Pará. O Portal Tucumã Milgrau acompanhará cada
-                  etapa dessa transformação.&quot;
-                </p>
-                <div className="font-menu text-[0.72rem] text-gray-400 mt-2.5">Editorial · 22/07/2026</div>
-              </div>
-            </div>
           </div>
 
           <Sidebar mostRead={mostRead} />

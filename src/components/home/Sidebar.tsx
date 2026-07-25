@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { EVENTS } from "@/data/news";
 import { formatViews, type ApiNews } from "@/lib/api";
-import PollWidget from "./PollWidget";
 import AdSlot from "@/components/ads/AdSlot";
 
 function Widget({ title, children }: { title: string; children: React.ReactNode }) {
@@ -57,10 +56,6 @@ export default function Sidebar({ mostRead }: { mostRead?: ApiNews[] }) {
           <div className="opacity-90">Dom<br />⛅<br />29°/21°</div>
         </div>
       </div>
-
-      <Widget title="🗳️ Enquete">
-        <PollWidget />
-      </Widget>
 
       <Widget title="📅 Agenda de Eventos">
         {EVENTS.map((e, i) => (
