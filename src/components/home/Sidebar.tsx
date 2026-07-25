@@ -2,6 +2,7 @@ import Link from "next/link";
 import { EVENTS } from "@/data/news";
 import { formatViews, type ApiNews } from "@/lib/api";
 import AdSlot from "@/components/ads/AdSlot";
+import WeatherWidget from "./WeatherWidget";
 
 function Widget({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -40,22 +41,7 @@ export default function Sidebar({ mostRead }: { mostRead?: ApiNews[] }) {
         )}
       </Widget>
 
-      <div className="rounded-xl p-[18px] mb-5 text-white bg-gradient-to-br from-highlight to-[#1d4ed8]">
-        <div className="font-menu text-[0.72rem] uppercase opacity-85 mb-1.5">Previsão do Tempo · Tucumã-PA</div>
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="text-[0.85rem] opacity-90">Parcialmente nublado</div>
-            <div className="font-title text-[2.4rem] font-bold">31°</div>
-          </div>
-          <div className="text-[2.4rem]">⛅</div>
-        </div>
-        <div className="flex justify-between mt-3.5 text-[0.72rem] text-center">
-          <div className="opacity-90">Qui<br />☀️<br />32°/22°</div>
-          <div className="opacity-90">Sex<br />⛅<br />30°/21°</div>
-          <div className="opacity-90">Sáb<br />🌧️<br />27°/20°</div>
-          <div className="opacity-90">Dom<br />⛅<br />29°/21°</div>
-        </div>
-      </div>
+      <WeatherWidget />
 
       <Widget title="📅 Agenda de Eventos">
         {EVENTS.map((e, i) => (
