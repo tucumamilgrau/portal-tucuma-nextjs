@@ -2,10 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    // Fotos de capa enviadas via painel admin ficam hospedadas na API (uploads locais).
-    // Em produção, troque localhost:3001 pelo domínio real da API.
+    // Fotos de capa enviadas via painel admin ficam hospedadas na API (uploads).
     remotePatterns: [
       { protocol: "http", hostname: "localhost", port: "3001", pathname: "/uploads/**" },
+      { protocol: "https", hostname: "portal-tucuma-api-production.up.railway.app", pathname: "/uploads/**" },
     ],
     // Next 16 bloqueia por padrão otimizar imagens de upstreams que resolvem para IP
     // privado/loopback (proteção contra SSRF) — inclui a API local em dev (localhost:3001).
