@@ -70,16 +70,20 @@ export default function NewsManager() {
     if (!token) return;
     setLoading(true);
     setLoadError(null);
-    try {
-      const [newsList, cats, auts] = await Promise.all([adminListNews(token), getCategories(), getAuthors()]);
-      setNews(newsList);
-      setCategories(cats);
-      setAuthors(auts);
-    } catch (err) {
-      setLoadError(err instanceof Error ? err.message : "Não foi possível carregar os dados.");
-    } finally {
-      setLoading(false);
-    }
+    // Chamadas independentes: uma falhar (ex.: token expirando) não deve impedir
+    // categorias/autores de carregar, já que são endpoints públicos separados.
+    const [newsResult, catsResult, autsResult] = await Promise.allSettled([
+      adminListNews(token),
+      getCategories(),
+      getAuthors(),
+    ]);
+    if (newsResult.status === "fulfilled") setNews(newsResult.value);
+    if (catsResult.status === "fulfilled") setCategories(catsResult.value);
+    if (autsResult.status === "fulfilled") setAuthors(autsResult.value);
+
+    const failed = newsResult.status === "rejected" ? newsResult.reason : null;
+    if (failed) setLoadError(failed instanceof Error ? failed.message : "Não foi possível carregar as notícias.");
+    setLoading(false);
   };
 
   useEffect(() => {
