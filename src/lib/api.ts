@@ -1,7 +1,7 @@
 // Cliente da API real (portal-tucuma-api, NestJS + Prisma) que substitui
 // gradualmente os dados mock de src/data/news.ts. Colunistas (perfil completo),
-// eventos, clima, enquete, vídeos, podcasts e classificados continuam mock —
-// não fazem parte do schema da API ainda (ver README do projeto da API).
+// eventos e podcasts continuam mock — não fazem parte do schema da API ainda
+// (ver README do projeto da API).
 import type { NewsItem } from "@/data/news";
 import { categoryImage, ARTICLE_PA279_IMAGE } from "@/lib/images";
 
@@ -369,6 +369,59 @@ export async function adminUpdateClassified(token: string, id: string, data: Par
 export async function adminDeleteClassified(token: string, id: string): Promise<void> {
   const res = await fetch(`${API_URL}/classifieds/${id}`, { method: "DELETE", headers: authHeaders(token) });
   if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível excluir o classificado."));
+}
+
+// ---------- Vídeos ----------
+
+export type ApiVideo = {
+  id: string;
+  title: string;
+  videoUrl: string;
+  thumbnailUrl: string | null;
+  icon: string;
+  duration: string | null;
+  views: number;
+  live: boolean;
+  active: boolean;
+  createdAt: string;
+};
+
+export type VideoFormInput = {
+  title: string;
+  videoUrl: string;
+  thumbnailUrl?: string;
+  icon?: string;
+  duration?: string;
+  views?: number;
+  live?: boolean;
+  active?: boolean;
+};
+
+export function getVideos() {
+  return safeGet<ApiVideo[]>("/videos", []);
+}
+
+export async function adminListVideos(token: string): Promise<ApiVideo[]> {
+  const res = await fetch(`${API_URL}/videos/admin`, { headers: authHeaders(token), cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível carregar os vídeos."));
+  return res.json();
+}
+
+export async function adminCreateVideo(token: string, data: VideoFormInput): Promise<ApiVideo> {
+  const res = await fetch(`${API_URL}/videos`, { method: "POST", headers: authHeaders(token), body: JSON.stringify(data) });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível criar o vídeo."));
+  return res.json();
+}
+
+export async function adminUpdateVideo(token: string, id: string, data: Partial<VideoFormInput>): Promise<ApiVideo> {
+  const res = await fetch(`${API_URL}/videos/${id}`, { method: "PATCH", headers: authHeaders(token), body: JSON.stringify(data) });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível salvar o vídeo."));
+  return res.json();
+}
+
+export async function adminDeleteVideo(token: string, id: string): Promise<void> {
+  const res = await fetch(`${API_URL}/videos/${id}`, { method: "DELETE", headers: authHeaders(token) });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível excluir o vídeo."));
 }
 
 // ---------- Comentários / moderação (admin) ----------

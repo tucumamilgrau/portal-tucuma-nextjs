@@ -6,7 +6,7 @@ import ColumnistsSection from "@/components/home/ColumnistsSection";
 import Sidebar from "@/components/home/Sidebar";
 import VideosSection from "@/components/home/VideosSection";
 import ClassifiedsSection from "@/components/home/ClassifiedsSection";
-import { getNews, getMostRead, getFeaturedNews, getClassifieds, mapApiNewsToNewsItem } from "@/lib/api";
+import { getNews, getMostRead, getFeaturedNews, getClassifieds, getVideos, mapApiNewsToNewsItem } from "@/lib/api";
 import AdSlot from "@/components/ads/AdSlot";
 
 function SectionHead({ title, seeAll }: { title: string; seeAll?: string }) {
@@ -37,6 +37,7 @@ export default async function Home() {
   const featuredItems = featuredNews.map(mapApiNewsToNewsItem);
 
   const classifieds = await getClassifieds();
+  const videos = await getVideos();
 
   return (
     <main>
@@ -80,7 +81,7 @@ export default async function Home() {
 
       <section className="max-w-[1280px] mx-auto px-4 py-10">
         <SectionHead title="Últimos Vídeos" seeAll="TV Milgrau" />
-        <VideosSection />
+        <VideosSection items={videos} />
       </section>
 
       <section id="classificados" className="max-w-[1280px] mx-auto px-4 py-10">

@@ -13,6 +13,7 @@ const NAV = [
       ["/admin/autores", "✍️ Autores"],
       ["/admin/midia", "🖼️ Mídia"],
       ["/admin/classificados", "📋 Classificados"],
+      ["/admin/videos", "🎥 Vídeos"],
     ],
   },
   {
