@@ -6,7 +6,7 @@ import ColumnistsSection from "@/components/home/ColumnistsSection";
 import Sidebar from "@/components/home/Sidebar";
 import VideosSection from "@/components/home/VideosSection";
 import ClassifiedsSection from "@/components/home/ClassifiedsSection";
-import { getNews, getMostRead, getFeaturedNews, getClassifieds, getVideos, mapApiNewsToNewsItem } from "@/lib/api";
+import { getNews, getMostRead, getFeaturedNews, getClassifieds, getVideos, getEvents, mapApiNewsToNewsItem } from "@/lib/api";
 import AdSlot from "@/components/ads/AdSlot";
 
 function SectionHead({ title, seeAll }: { title: string; seeAll?: string }) {
@@ -38,6 +38,7 @@ export default async function Home() {
 
   const classifieds = await getClassifieds();
   const videos = await getVideos();
+  const events = await getEvents();
 
   return (
     <main>
@@ -75,7 +76,7 @@ export default async function Home() {
             <ColumnistsSection />
           </div>
 
-          <Sidebar mostRead={mostRead} />
+          <Sidebar mostRead={mostRead} events={events} />
         </div>
       </section>
 

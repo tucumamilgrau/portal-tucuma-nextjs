@@ -1,8 +1,15 @@
 import Link from "next/link";
-import { EVENTS } from "@/data/news";
-import { formatViews, type ApiNews } from "@/lib/api";
+import { formatViews, type ApiNews, type ApiEvent } from "@/lib/api";
 import AdSlot from "@/components/ads/AdSlot";
 import WeatherWidget from "./WeatherWidget";
+
+function formatEventDay(iso: string) {
+  const d = new Date(iso);
+  const day = d.toLocaleDateString("pt-BR", { day: "2-digit" });
+  const mon = d.toLocaleDateString("pt-BR", { month: "short" }).replace(".", "").toUpperCase().slice(0, 3);
+  const time = d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }).replace(":", "h");
+  return { day, mon, time };
+}
 
 function Widget({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -16,8 +23,9 @@ function Widget({ title, children }: { title: string; children: React.ReactNode 
   );
 }
 
-export default function Sidebar({ mostRead }: { mostRead?: ApiNews[] }) {
+export default function Sidebar({ mostRead, events }: { mostRead?: ApiNews[]; events?: ApiEvent[] }) {
   const items = mostRead?.map((n) => ({ slug: n.slug, title: n.title, views: formatViews(n.views) })) ?? [];
+  const upcoming = events ?? [];
 
   return (
     <aside>
@@ -44,18 +52,25 @@ export default function Sidebar({ mostRead }: { mostRead?: ApiNews[] }) {
       <WeatherWidget />
 
       <Widget title="📅 Agenda de Eventos">
-        {EVENTS.map((e, i) => (
-          <div key={e.titulo} className={`flex gap-3.5 py-3 ${i < EVENTS.length - 1 ? "border-b border-gray-100" : ""}`}>
-            <div className="bg-support text-white rounded-md w-[52px] h-[52px] shrink-0 flex flex-col items-center justify-center font-title">
-              <span className="text-[1.1rem] font-bold leading-none">{e.day}</span>
-              <span className="text-[0.6rem] uppercase text-primary">{e.mon}</span>
-            </div>
-            <div>
-              <h4 className="text-[0.83rem] font-semibold">{e.titulo}</h4>
-              <div className="font-menu text-[0.68rem] text-gray-400">{e.local}</div>
-            </div>
-          </div>
-        ))}
+        {upcoming.length > 0 ? (
+          upcoming.map((e, i) => {
+            const { day, mon, time } = formatEventDay(e.eventDate);
+            return (
+              <div key={e.id} className={`flex gap-3.5 py-3 ${i < upcoming.length - 1 ? "border-b border-gray-100" : ""}`}>
+                <div className="bg-support text-white rounded-md w-[52px] h-[52px] shrink-0 flex flex-col items-center justify-center font-title">
+                  <span className="text-[1.1rem] font-bold leading-none">{day}</span>
+                  <span className="text-[0.6rem] uppercase text-primary">{mon}</span>
+                </div>
+                <div>
+                  <h4 className="text-[0.83rem] font-semibold">{e.title}</h4>
+                  <div className="font-menu text-[0.68rem] text-gray-400">{e.location} · {time}</div>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-gray-500 text-[0.85rem]">Nenhum evento agendado no momento.</p>
+        )}
       </Widget>
 
       <div className="bg-white rounded-xl shadow-sm p-[18px] mb-5">

@@ -1,7 +1,7 @@
 // Cliente da API real (portal-tucuma-api, NestJS + Prisma) que substitui
-// gradualmente os dados mock de src/data/news.ts. Colunistas (perfil completo),
-// eventos e podcasts continuam mock — não fazem parte do schema da API ainda
-// (ver README do projeto da API).
+// gradualmente os dados mock de src/data/news.ts. Colunistas (perfil completo)
+// e podcasts continuam mock — não fazem parte do schema da API ainda (ver
+// README do projeto da API).
 import type { NewsItem } from "@/data/news";
 import { categoryImage, ARTICLE_PA279_IMAGE } from "@/lib/images";
 
@@ -422,6 +422,51 @@ export async function adminUpdateVideo(token: string, id: string, data: Partial<
 export async function adminDeleteVideo(token: string, id: string): Promise<void> {
   const res = await fetch(`${API_URL}/videos/${id}`, { method: "DELETE", headers: authHeaders(token) });
   if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível excluir o vídeo."));
+}
+
+// ---------- Agenda de Eventos ----------
+
+export type ApiEvent = {
+  id: string;
+  title: string;
+  location: string;
+  eventDate: string;
+  active: boolean;
+  createdAt: string;
+};
+
+export type EventFormInput = {
+  title: string;
+  location: string;
+  eventDate: string;
+  active?: boolean;
+};
+
+export function getEvents() {
+  return safeGet<ApiEvent[]>("/events", []);
+}
+
+export async function adminListEvents(token: string): Promise<ApiEvent[]> {
+  const res = await fetch(`${API_URL}/events/admin`, { headers: authHeaders(token), cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível carregar os eventos."));
+  return res.json();
+}
+
+export async function adminCreateEvent(token: string, data: EventFormInput): Promise<ApiEvent> {
+  const res = await fetch(`${API_URL}/events`, { method: "POST", headers: authHeaders(token), body: JSON.stringify(data) });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível criar o evento."));
+  return res.json();
+}
+
+export async function adminUpdateEvent(token: string, id: string, data: Partial<EventFormInput>): Promise<ApiEvent> {
+  const res = await fetch(`${API_URL}/events/${id}`, { method: "PATCH", headers: authHeaders(token), body: JSON.stringify(data) });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível salvar o evento."));
+  return res.json();
+}
+
+export async function adminDeleteEvent(token: string, id: string): Promise<void> {
+  const res = await fetch(`${API_URL}/events/${id}`, { method: "DELETE", headers: authHeaders(token) });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível excluir o evento."));
 }
 
 // ---------- Comentários / moderação (admin) ----------
