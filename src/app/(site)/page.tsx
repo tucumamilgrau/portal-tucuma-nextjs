@@ -6,7 +6,6 @@ import ColumnistsSection from "@/components/home/ColumnistsSection";
 import Sidebar from "@/components/home/Sidebar";
 import VideosSection from "@/components/home/VideosSection";
 import ClassifiedsSection from "@/components/home/ClassifiedsSection";
-import { NEWS_MOCK } from "@/data/news";
 import { getNews, getMostRead, getFeaturedNews, getClassifieds, mapApiNewsToNewsItem } from "@/lib/api";
 import AdSlot from "@/components/ads/AdSlot";
 
@@ -25,8 +24,9 @@ function SectionHead({ title, seeAll }: { title: string; seeAll?: string }) {
 export default async function Home() {
   // limit 12: os 4 primeiros (mais recentes por publishedAt) alimentam o Hero
   // ("Última Hora" + 3 mini-manchetes) e os demais preenchem o grid — sem repetir notícia.
+  // Sem fallback mock: mostrar notícias falsas como se fossem reais seria enganoso.
   const apiNews = await getNews({ limit: 12 });
-  const newsItems = apiNews.length ? apiNews.map(mapApiNewsToNewsItem) : NEWS_MOCK;
+  const newsItems = apiNews.map(mapApiNewsToNewsItem);
   const heroItems = newsItems.slice(0, 4);
   const gridItems = newsItems.slice(4, 12);
   const mostRead = await getMostRead(7);
@@ -44,11 +44,15 @@ export default async function Home() {
 
       <section id="ultimas" className="max-w-[1280px] mx-auto px-4 py-10">
         <SectionHead title="Últimas Notícias" seeAll="Ver todas" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {gridItems.map((item) => (
-            <NewsCard key={item.slug} item={item} />
-          ))}
-        </div>
+        {gridItems.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {gridItems.map((item) => (
+              <NewsCard key={item.slug} item={item} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500 py-6">Nenhuma notícia publicada ainda. Volte em breve.</p>
+        )}
       </section>
 
       {featuredItems.length > 0 && (

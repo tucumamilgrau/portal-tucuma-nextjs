@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MOST_READ_MOCK, EVENTS } from "@/data/news";
+import { EVENTS } from "@/data/news";
 import { formatViews, type ApiNews } from "@/lib/api";
 import PollWidget from "./PollWidget";
 import AdSlot from "@/components/ads/AdSlot";
@@ -17,26 +17,28 @@ function Widget({ title, children }: { title: string; children: React.ReactNode 
 }
 
 export default function Sidebar({ mostRead }: { mostRead?: ApiNews[] }) {
-  const items = mostRead?.length
-    ? mostRead.map((n) => ({ slug: n.slug, title: n.title, views: formatViews(n.views) }))
-    : MOST_READ_MOCK.map((title, i) => ({ slug: null, title, views: `${((9 - i) * 1.3 + 1).toFixed(1)}k` }));
+  const items = mostRead?.map((n) => ({ slug: n.slug, title: n.title, views: formatViews(n.views) })) ?? [];
 
   return (
     <aside>
       <Widget title="🔥 Mais Lidas">
-        <ol>
-          {items.map((item, i) => (
-            <li key={item.title} className="flex gap-3.5 py-2.5 border-b border-gray-100 last:border-0 items-start">
-              <span className="rank-num w-7 shrink-0">{i + 1}</span>
-              <div>
-                <h4 className="text-[0.85rem] font-semibold leading-snug hover:text-primary">
-                  {item.slug ? <Link href={`/noticia/${item.slug}`}>{item.title}</Link> : <a href="#">{item.title}</a>}
-                </h4>
-                <div className="font-menu text-[0.65rem] text-gray-400 mt-1">👁️ {item.views} visualizações</div>
-              </div>
-            </li>
-          ))}
-        </ol>
+        {items.length > 0 ? (
+          <ol>
+            {items.map((item, i) => (
+              <li key={item.title} className="flex gap-3.5 py-2.5 border-b border-gray-100 last:border-0 items-start">
+                <span className="rank-num w-7 shrink-0">{i + 1}</span>
+                <div>
+                  <h4 className="text-[0.85rem] font-semibold leading-snug hover:text-primary">
+                    <Link href={`/noticia/${item.slug}`}>{item.title}</Link>
+                  </h4>
+                  <div className="font-menu text-[0.65rem] text-gray-400 mt-1">👁️ {item.views} visualizações</div>
+                </div>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className="text-gray-500 text-[0.85rem]">Nenhuma leitura registrada ainda.</p>
+        )}
       </Widget>
 
       <div className="rounded-xl p-[18px] mb-5 text-white bg-gradient-to-br from-highlight to-[#1d4ed8]">
