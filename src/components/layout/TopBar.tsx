@@ -1,4 +1,5 @@
 import LiveDateWeather from "./LiveDateWeather";
+import LiveExchangeRate from "./LiveExchangeRate";
 
 export default function TopBar() {
   return (
@@ -6,7 +7,7 @@ export default function TopBar() {
       <div className="max-w-[1280px] mx-auto px-4 flex items-center justify-between gap-4 h-[34px] overflow-x-auto [scrollbar-width:none]">
         <div className="flex items-center gap-3.5 whitespace-nowrap">
           <LiveDateWeather />
-          <span className="opacity-90 flex items-center gap-1">💵 Dólar R$ 5,42</span>
+          <LiveExchangeRate />
         </div>
         <div className="flex items-center gap-3.5 whitespace-nowrap">
           <div className="flex gap-2.5">
