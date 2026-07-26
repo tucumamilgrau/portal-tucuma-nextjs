@@ -15,6 +15,7 @@ const NAV = [
       ["/admin/classificados", "📋 Classificados"],
       ["/admin/videos", "🎥 Vídeos"],
       ["/admin/eventos", "📅 Agenda de Eventos"],
+      ["/admin/colunistas", "🖋️ Colunistas & Opinião"],
     ],
   },
   {

@@ -1,7 +1,6 @@
 // Cliente da API real (portal-tucuma-api, NestJS + Prisma) que substitui
-// gradualmente os dados mock de src/data/news.ts. Colunistas (perfil completo)
-// e podcasts continuam mock — não fazem parte do schema da API ainda (ver
-// README do projeto da API).
+// gradualmente os dados mock de src/data/news.ts. Podcasts continua mock —
+// não faz parte do schema da API ainda (ver README do projeto da API).
 import type { NewsItem } from "@/data/news";
 import { categoryImage, ARTICLE_PA279_IMAGE } from "@/lib/images";
 
@@ -467,6 +466,51 @@ export async function adminUpdateEvent(token: string, id: string, data: Partial<
 export async function adminDeleteEvent(token: string, id: string): Promise<void> {
   const res = await fetch(`${API_URL}/events/${id}`, { method: "DELETE", headers: authHeaders(token) });
   if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível excluir o evento."));
+}
+
+// ---------- Colunistas & Opinião ----------
+
+export type ApiColumn = {
+  id: string;
+  title: string;
+  excerpt: string;
+  status: "DRAFT" | "SCHEDULED" | "PUBLISHED";
+  createdAt: string;
+  author: ApiAuthor;
+};
+
+export type ColumnFormInput = {
+  title: string;
+  excerpt?: string;
+  status?: "DRAFT" | "SCHEDULED" | "PUBLISHED";
+  authorSlug: string;
+};
+
+export function getColumns(limit = 4) {
+  return safeGet<ApiColumn[]>(`/columns?limit=${limit}`, []);
+}
+
+export async function adminListColumns(token: string): Promise<ApiColumn[]> {
+  const res = await fetch(`${API_URL}/columns/admin`, { headers: authHeaders(token), cache: "no-store" });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível carregar as colunas."));
+  return res.json();
+}
+
+export async function adminCreateColumn(token: string, data: ColumnFormInput): Promise<ApiColumn> {
+  const res = await fetch(`${API_URL}/columns`, { method: "POST", headers: authHeaders(token), body: JSON.stringify(data) });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível criar a coluna."));
+  return res.json();
+}
+
+export async function adminUpdateColumn(token: string, id: string, data: Partial<ColumnFormInput>): Promise<ApiColumn> {
+  const res = await fetch(`${API_URL}/columns/${id}`, { method: "PATCH", headers: authHeaders(token), body: JSON.stringify(data) });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível salvar a coluna."));
+  return res.json();
+}
+
+export async function adminDeleteColumn(token: string, id: string): Promise<void> {
+  const res = await fetch(`${API_URL}/columns/${id}`, { method: "DELETE", headers: authHeaders(token) });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível excluir a coluna."));
 }
 
 // ---------- Comentários / moderação (admin) ----------
