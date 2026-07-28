@@ -10,12 +10,6 @@ export default function TopBar() {
           <LiveExchangeRate />
         </div>
         <div className="flex items-center gap-3.5 whitespace-nowrap">
-          <div className="flex gap-2.5">
-            <a href="#" aria-label="Instagram" className="opacity-90 hover:text-primary hover:opacity-100">📸</a>
-            <a href="#" aria-label="Facebook" className="opacity-90 hover:text-primary hover:opacity-100">📘</a>
-            <a href="#" aria-label="YouTube" className="opacity-90 hover:text-primary hover:opacity-100">▶️</a>
-            <a href="#" aria-label="X" className="opacity-90 hover:text-primary hover:opacity-100">✖️</a>
-          </div>
           <a
             href="https://www.radio-ao-vivo.com/jovem-pan-brasilia"
             target="_blank"
