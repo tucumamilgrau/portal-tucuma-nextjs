@@ -45,18 +45,25 @@ export default async function Home() {
     <main>
       <Hero items={heroItems} />
 
-      <section id="ultimas" className="max-w-[1280px] mx-auto px-4 py-10">
-        <SectionHead title="Últimas Notícias" seeAll="Ver todas" />
-        {gridItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {gridItems.map((item) => (
-              <NewsCard key={item.slug} item={item} />
-            ))}
-          </div>
-        ) : (
+      {apiNews.length === 0 ? (
+        <section id="ultimas" className="max-w-[1280px] mx-auto px-4 py-10">
+          <SectionHead title="Últimas Notícias" seeAll="Ver todas" />
           <p className="text-gray-500 py-6">Nenhuma notícia publicada ainda. Volte em breve.</p>
-        )}
-      </section>
+        </section>
+      ) : (
+        gridItems.length > 0 && (
+          <section id="ultimas" className="max-w-[1280px] mx-auto px-4 py-10">
+            <SectionHead title="Últimas Notícias" seeAll="Ver todas" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {gridItems.map((item) => (
+                <NewsCard key={item.slug} item={item} />
+              ))}
+            </div>
+          </section>
+        )
+        // Com 4 notícias ou menos, todas já aparecem no Hero acima — a seção some
+        // em vez de mostrar "nenhuma notícia" (enganoso, já existem notícias reais).
+      )}
 
       {featuredItems.length > 0 && (
         <section className="max-w-[1280px] mx-auto px-4 py-10">
