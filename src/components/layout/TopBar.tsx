@@ -10,6 +10,26 @@ export default function TopBar() {
           <LiveExchangeRate />
         </div>
         <div className="flex items-center gap-3.5 whitespace-nowrap">
+          <div className="flex gap-2.5">
+            <a
+              href="https://www.instagram.com/tucumamilgrau2"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="opacity-90 hover:text-primary hover:opacity-100"
+            >
+              📸
+            </a>
+            <a
+              href="https://www.facebook.com/tucumamilgrau"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="opacity-90 hover:text-primary hover:opacity-100"
+            >
+              📘
+            </a>
+          </div>
           <a
             href="https://www.radio-ao-vivo.com/jovem-pan-brasilia"
             target="_blank"
