@@ -32,6 +32,7 @@ export type ApiNews = {
   status: string;
   publishedAt: string;
   featured: boolean;
+  videoUrl: string | null;
   sourceUrl: string | null;
   sourceName: string | null;
   category: ApiCategory;
@@ -141,6 +142,7 @@ export type NewsFormInput = {
   featured?: boolean;
   categorySlug: string;
   authorSlug: string;
+  videoUrl?: string;
 };
 
 function authHeaders(token: string) {
@@ -643,4 +645,12 @@ export function formatViews(n: number): string {
 export function formatTime(iso: string): string {
   const d = new Date(iso);
   return d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }).replace(":", "h");
+}
+
+/** Se a URL for do YouTube, retorna a URL de embed pra tocar direto na página. */
+export function getYouTubeEmbedUrl(url: string): string | null {
+  const match = url.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{6,})/,
+  );
+  return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 }

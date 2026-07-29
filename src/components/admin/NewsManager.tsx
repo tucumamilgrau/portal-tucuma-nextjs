@@ -40,6 +40,7 @@ const EMPTY_FORM: NewsFormInput = {
   featured: false,
   categorySlug: "",
   authorSlug: "",
+  videoUrl: "",
 };
 
 export default function NewsManager() {
@@ -134,6 +135,7 @@ export default function NewsManager() {
       featured: n.featured,
       categorySlug: n.category.slug,
       authorSlug: n.author.slug,
+      videoUrl: n.videoUrl ?? "",
     });
     setFormError(null);
     resetCoverState();
@@ -386,6 +388,16 @@ export default function NewsManager() {
                 />
                 ⭐ Destaque (aparece no slider &quot;Notícias em Destaque&quot; da home)
               </label>
+
+              <FormField label="Vídeo (opcional, aparece abaixo do texto da notícia)">
+                <input
+                  type="url"
+                  placeholder="https://youtube.com/watch?v=... ou outro link de vídeo"
+                  value={form.videoUrl}
+                  onChange={(e) => setForm((f) => ({ ...f, videoUrl: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-md text-[0.85rem]"
+                />
+              </FormField>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <FormField label="Categoria">

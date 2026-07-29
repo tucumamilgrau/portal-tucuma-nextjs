@@ -9,7 +9,7 @@ import ShareWhatsAppButton from "@/components/article/ShareWhatsAppButton";
 import Sidebar from "@/components/home/Sidebar";
 import NewsCard from "@/components/home/NewsCard";
 import AdSlot from "@/components/ads/AdSlot";
-import { getNewsBySlug, getMostRead, mapApiNewsToNewsItem, formatTime, formatViews, resolveMediaUrl } from "@/lib/api";
+import { getNewsBySlug, getMostRead, mapApiNewsToNewsItem, formatTime, formatViews, resolveMediaUrl, getYouTubeEmbedUrl } from "@/lib/api";
 import { categoryImage, ARTICLE_PA279_IMAGE } from "@/lib/images";
 
 // Slug do artigo "flagship" com tratamento editorial completo (galeria, mapa,
@@ -80,6 +80,30 @@ export default async function NoticiaPage({ params }: { params: Promise<{ slug: 
           ) : (
             article.body.split("\n\n").map((paragraph, i) => <p key={i}>{paragraph}</p>)
           )}
+
+          {article.videoUrl && (() => {
+            const embedUrl = getYouTubeEmbedUrl(article.videoUrl);
+            return embedUrl ? (
+              <div className="not-prose my-6 aspect-video rounded-xl overflow-hidden shadow-md">
+                <iframe
+                  src={embedUrl}
+                  title="Vídeo da notícia"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="w-full h-full"
+                />
+              </div>
+            ) : (
+              <a
+                href={article.videoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="not-prose inline-flex items-center gap-2 my-6 px-4 py-2.5 rounded-full bg-primary text-white font-menu font-semibold text-[0.85rem] hover:opacity-90"
+              >
+                ▶ Assistir ao vídeo
+              </a>
+            );
+          })()}
 
           {article.sourceUrl && (
             <p className="not-prose flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-3 font-menu text-[0.8rem] text-gray-600">
