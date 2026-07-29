@@ -392,7 +392,7 @@ export default function NewsManager() {
               <FormField label="Vídeo (opcional, aparece abaixo do texto da notícia)">
                 <input
                   type="url"
-                  placeholder="https://youtube.com/watch?v=... ou outro link de vídeo"
+                  placeholder="Link do YouTube ou do Instagram (post/reel)"
                   value={form.videoUrl}
                   onChange={(e) => setForm((f) => ({ ...f, videoUrl: e.target.value }))}
                   className="w-full px-3 py-2 border border-gray-200 rounded-md text-[0.85rem]"

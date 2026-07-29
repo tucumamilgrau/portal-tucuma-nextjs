@@ -654,3 +654,8 @@ export function getYouTubeEmbedUrl(url: string): string | null {
   );
   return match ? `https://www.youtube.com/embed/${match[1]}` : null;
 }
+
+/** true se a URL for um post/reel/vídeo público do Instagram (pra usar o embed oficial). */
+export function isInstagramUrl(url: string): boolean {
+  return /instagram\.com\/(p|reel|tv)\//.test(url);
+}

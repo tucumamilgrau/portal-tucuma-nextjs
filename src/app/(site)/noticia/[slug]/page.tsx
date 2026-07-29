@@ -9,7 +9,8 @@ import ShareWhatsAppButton from "@/components/article/ShareWhatsAppButton";
 import Sidebar from "@/components/home/Sidebar";
 import NewsCard from "@/components/home/NewsCard";
 import AdSlot from "@/components/ads/AdSlot";
-import { getNewsBySlug, getMostRead, mapApiNewsToNewsItem, formatTime, formatViews, resolveMediaUrl, getYouTubeEmbedUrl } from "@/lib/api";
+import InstagramEmbed from "@/components/article/InstagramEmbed";
+import { getNewsBySlug, getMostRead, mapApiNewsToNewsItem, formatTime, formatViews, resolveMediaUrl, getYouTubeEmbedUrl, isInstagramUrl } from "@/lib/api";
 import { categoryImage, ARTICLE_PA279_IMAGE } from "@/lib/images";
 
 // Slug do artigo "flagship" com tratamento editorial completo (galeria, mapa,
@@ -83,17 +84,23 @@ export default async function NoticiaPage({ params }: { params: Promise<{ slug: 
 
           {article.videoUrl && (() => {
             const embedUrl = getYouTubeEmbedUrl(article.videoUrl);
-            return embedUrl ? (
-              <div className="not-prose my-6 aspect-video rounded-xl overflow-hidden shadow-md">
-                <iframe
-                  src={embedUrl}
-                  title="Vídeo da notícia"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
-                />
-              </div>
-            ) : (
+            if (embedUrl) {
+              return (
+                <div className="not-prose my-6 aspect-video rounded-xl overflow-hidden shadow-md">
+                  <iframe
+                    src={embedUrl}
+                    title="Vídeo da notícia"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
+                  />
+                </div>
+              );
+            }
+            if (isInstagramUrl(article.videoUrl)) {
+              return <InstagramEmbed url={article.videoUrl} />;
+            }
+            return (
               <a
                 href={article.videoUrl}
                 target="_blank"
