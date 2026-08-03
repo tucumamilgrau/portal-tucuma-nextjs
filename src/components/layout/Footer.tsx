@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaInstagram, FaFacebookF, FaWhatsapp } from "react-icons/fa6";
 import NewsletterForm from "./NewsletterForm";
 import { FOOTER_BG_IMAGE } from "@/lib/images";
 import { categoryHref } from "@/lib/categories";
@@ -16,9 +17,33 @@ export default function Footer() {
             <span className="font-title font-extrabold text-xl text-white">TUCUMÃ <span className="text-primary">MILGRAU</span></span>
             <p className="text-[0.8rem] text-gray-400 mt-2.5">Jornalismo independente e em tempo real para Tucumã e toda a região sul do Pará.</p>
             <div className="flex gap-2.5 mt-3.5">
-              {["📸", "📘", "▶️", "✖️", "🟢"].map((i) => (
-                <a key={i} href="#" className="w-[34px] h-[34px] rounded-full bg-[#1f1f1f] flex items-center justify-center hover:bg-primary">{i}</a>
-              ))}
+              <a
+                href="https://www.instagram.com/tucumamilgrau2"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-[34px] h-[34px] rounded-full bg-[#1f1f1f] flex items-center justify-center hover:bg-primary"
+              >
+                <FaInstagram size={15} />
+              </a>
+              <a
+                href="https://www.facebook.com/tucumamilgrau"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-[34px] h-[34px] rounded-full bg-[#1f1f1f] flex items-center justify-center hover:bg-primary"
+              >
+                <FaFacebookF size={15} />
+              </a>
+              <a
+                href="https://wa.me/5562982282495?text=Ol%C3%A1%20%2C%20gostaria%20de%20fazer%20uma%20den%C3%BAncia%20ou%20tirar%20alguma%20d%C3%BAvida%20com%20o%20portal%20Tucum%C3%A3%20milgrau.%20"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp"
+                className="w-[34px] h-[34px] rounded-full bg-[#1f1f1f] flex items-center justify-center hover:bg-primary"
+              >
+                <FaWhatsapp size={16} />
+              </a>
             </div>
           </div>
           <div>
