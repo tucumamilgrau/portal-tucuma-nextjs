@@ -615,6 +615,24 @@ export async function changePassword(token: string, currentPassword: string, new
   if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível trocar a senha."));
 }
 
+export async function forgotPassword(email: string): Promise<void> {
+  const res = await fetch(`${API_URL}/auth/forgot-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email }),
+  });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível enviar o e-mail de redefinição."));
+}
+
+export async function resetPassword(token: string, newPassword: string): Promise<void> {
+  const res = await fetch(`${API_URL}/auth/reset-password`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ token, newPassword }),
+  });
+  if (!res.ok) throw new Error(await readErrorMessage(res, "Não foi possível redefinir a senha."));
+}
+
 const COLOR_MAP: Record<string, NewsItem["color"]> = {
   alert: "alert",
   highlight: "highlight",

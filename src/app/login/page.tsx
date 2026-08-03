@@ -92,7 +92,7 @@ export default function LoginPage() {
             />
             <div className="flex justify-between items-center text-[0.78rem] mb-4">
               <label className="flex items-center gap-1.5"><input type="checkbox" />Lembrar-me</label>
-              <a href="#" className="text-primary font-semibold">Esqueci a senha</a>
+              <Link href="/esqueci-senha" className="text-primary font-semibold">Esqueci a senha</Link>
             </div>
             <button
               type="submit"
