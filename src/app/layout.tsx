@@ -42,6 +42,9 @@ export const metadata: Metadata = {
   ],
   manifest: "/manifest.json",
   icons: { icon: "/icon.svg" },
+  verification: {
+    google: "eKtfcLpihMH2RLDFRBegZCYdFTW7pmqtfkZXlLwt_Cg",
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",
