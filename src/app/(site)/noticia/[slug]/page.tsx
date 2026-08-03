@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import ImgPlaceholder from "@/components/ui/ImgPlaceholder";
 import Tag from "@/components/ui/Tag";
 import ArticleToc from "@/components/article/ArticleToc";
@@ -17,6 +18,35 @@ import { categoryImage, ARTICLE_PA279_IMAGE } from "@/lib/images";
 // citação em destaque, índice) — para os demais, o corpo vem 1:1 da API.
 const FLAGSHIP_SLUG = "duplicacao-pa-279";
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getNewsBySlug(slug);
+  if (!article) return {};
+
+  const image = resolveMediaUrl(article.coverImage);
+  return {
+    title: article.title,
+    description: article.excerpt,
+    alternates: { canonical: `/noticia/${slug}` },
+    authors: [{ name: article.author.name }],
+    openGraph: {
+      type: "article",
+      title: article.title,
+      description: article.excerpt,
+      publishedTime: article.publishedAt,
+      authors: [article.author.name],
+      section: article.category.name,
+      images: image ? [{ url: image }] : undefined,
+    },
+    twitter: {
+      card: image ? "summary_large_image" : "summary",
+      title: article.title,
+      description: article.excerpt,
+      images: image ? [image] : undefined,
+    },
+  };
+}
+
 export default async function NoticiaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const [article, mostRead] = await Promise.all([getNewsBySlug(slug), getMostRead(7)]);
@@ -27,8 +57,26 @@ export default async function NoticiaPage({ params }: { params: Promise<{ slug: 
   const publishedDate = new Date(article.publishedAt).toLocaleDateString("pt-BR");
   const tagColor = article.category.color === "alert" ? "alert" : article.category.color === "highlight" ? "highlight" : "primary";
 
+  const articleImage = resolveMediaUrl(article.coverImage);
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    headline: article.title,
+    description: article.excerpt,
+    image: articleImage ? [articleImage] : undefined,
+    datePublished: article.publishedAt,
+    author: { "@type": "Person", name: article.author.name },
+    publisher: {
+      "@type": "Organization",
+      name: "Portal Tucumã Milgrau",
+      logo: { "@type": "ImageObject", url: "https://portaltucumamilgrau.com.br/images/logo-icon.webp" },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `https://portaltucumamilgrau.com.br/noticia/${slug}` },
+  };
+
   return (
     <main className="max-w-[1280px] mx-auto px-4">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
       <ReadingProgress />
 
       <p className="font-menu text-[0.75rem] text-gray-600 my-4">

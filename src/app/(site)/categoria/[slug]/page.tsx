@@ -1,9 +1,26 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import NewsCard from "@/components/home/NewsCard";
 import Sidebar from "@/components/home/Sidebar";
 import Tag from "@/components/ui/Tag";
 import { getCategories, getNews, getMostRead, mapApiNewsToNewsItem } from "@/lib/api";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const categories = await getCategories();
+  const category = categories.find((c) => c.slug === slug);
+  if (!category) return {};
+
+  const title = `Notícias de ${category.name}`;
+  const description = `Últimas notícias de ${category.name} no Portal Tucumã Milgrau — cobertura de Tucumã e região sul do Pará.`;
+  return {
+    title,
+    description,
+    alternates: { canonical: `/categoria/${slug}` },
+    openGraph: { title, description, type: "website" },
+  };
+}
 
 export default async function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
