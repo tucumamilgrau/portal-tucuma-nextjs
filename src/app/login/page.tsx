@@ -3,6 +3,8 @@
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebookF } from "react-icons/fa6";
 import { loginUser, registerUser } from "@/lib/api";
 import { saveSession } from "@/lib/auth-client";
 
@@ -110,8 +112,8 @@ function LoginForm() {
               {loading ? "Entrando..." : "Entrar"}
             </button>
             <div className="flex flex-col gap-2.5 mt-4">
-              <SocialButton icon="🔴" label="Continuar com Google" />
-              <SocialButton icon="🔵" label="Continuar com Facebook" />
+              <SocialButton icon={<FcGoogle size={18} />} label="Continuar com Google" />
+              <SocialButton icon={<FaFacebookF size={16} className="text-[#1877F2]" />} label="Continuar com Facebook" />
             </div>
           </form>
         ) : (
@@ -193,7 +195,7 @@ function Field({ label, ...props }: { label: string } & React.InputHTMLAttribute
   );
 }
 
-function SocialButton({ icon, label }: { icon: string; label: string }) {
+function SocialButton({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <button type="button" className="flex items-center justify-center gap-2 py-2.5 border border-gray-200 rounded-md font-semibold text-[0.82rem]">
       {icon} {label}
