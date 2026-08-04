@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { loginUser, registerUser } from "@/lib/api";
 import { saveSession } from "@/lib/auth-client";
 
 const CIDADES = ["Tucumã", "Ourilândia", "São Félix", "Xinguara", "Redenção", "Canaã", "Marabá"];
 
-export default function LoginPage() {
+function LoginForm() {
   const [tab, setTab] = useState<"login" | "signup">("login");
   const router = useRouter();
+  const params = useSearchParams();
+  const next = params.get("next") || "/";
+  const expired = params.get("expired") === "1";
 
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [signupForm, setSignupForm] = useState({ name: "", email: "", password: "", city: CIDADES[0] });
@@ -24,7 +27,7 @@ export default function LoginPage() {
     try {
       const auth = await loginUser(loginForm);
       saveSession(auth);
-      router.push("/");
+      router.push(next);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Não foi possível entrar.");
     } finally {
@@ -39,7 +42,7 @@ export default function LoginPage() {
     try {
       const auth = await registerUser(signupForm);
       saveSession(auth);
-      router.push("/");
+      router.push(next);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Não foi possível criar a conta.");
     } finally {
@@ -72,6 +75,11 @@ export default function LoginPage() {
           </button>
         </div>
 
+        {expired && !error && (
+          <p className="text-amber-600 bg-amber-50 border border-amber-200 rounded-md text-[0.78rem] mb-3.5 text-center py-2 px-3">
+            Sua sessão expirou por inatividade. Faça login novamente.
+          </p>
+        )}
         {error && <p className="text-alert text-[0.8rem] mb-3.5 text-center">{error}</p>}
 
         {tab === "login" ? (
@@ -165,6 +173,14 @@ export default function LoginPage() {
         ← Voltar para o portal
       </Link>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }
 

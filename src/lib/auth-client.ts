@@ -15,15 +15,41 @@ export function clearSession() {
   window.dispatchEvent(new Event(AUTH_EVENT));
 }
 
+function getTokenExpiry(token: string): number | null {
+  try {
+    const payload = token.split(".")[1];
+    const json = JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
+    return typeof json.exp === "number" ? json.exp * 1000 : null;
+  } catch {
+    return null;
+  }
+}
+
 export function loadSession(): AuthResponse | null {
   if (typeof window === "undefined") return null;
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return null;
   try {
-    return JSON.parse(raw) as AuthResponse;
+    const auth = JSON.parse(raw) as AuthResponse;
+    const expiresAt = getTokenExpiry(auth.token);
+    if (expiresAt !== null && Date.now() >= expiresAt) {
+      localStorage.removeItem(STORAGE_KEY);
+      window.dispatchEvent(new Event(AUTH_EVENT));
+      return null;
+    }
+    return auth;
   } catch {
     return null;
   }
+}
+
+/** Verifica periodicamente se a sessão expirou (token JWT vencido) e limpa
+ * o localStorage automaticamente, mesmo sem nenhuma requisição à API. */
+export function watchSessionExpiry(intervalMs = 30_000): () => void {
+  const id = window.setInterval(() => {
+    loadSession();
+  }, intervalMs);
+  return () => window.clearInterval(id);
 }
 
 export function getStoredUser(): AuthUser | null {

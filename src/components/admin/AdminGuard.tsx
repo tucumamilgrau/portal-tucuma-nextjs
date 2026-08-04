@@ -1,28 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { getStoredUser } from "@/lib/auth-client";
+import { getStoredUser, onAuthChange, watchSessionExpiry } from "@/lib/auth-client";
 
 type Status = "checking" | "denied" | "ok";
 
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<Status>("checking");
   const router = useRouter();
+  const wasOk = useRef(false);
 
   useEffect(() => {
-    const user = getStoredUser();
-    if (!user) {
-      router.replace("/login?next=/admin");
-      return;
-    }
-    if (user.role !== "ADMIN") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- verificação de sessão só pode ocorrer após montar no cliente
-      setStatus("denied");
-      return;
-    }
-    setStatus("ok");
+    const check = () => {
+      const user = getStoredUser();
+      if (!user) {
+        // Se a sessão já tinha sido validada e sumiu, foi expiração (token de 1h vencido);
+        // avisa o usuário em vez de simplesmente jogar de volta pro login sem explicação.
+        router.replace(wasOk.current ? "/login?next=/admin&expired=1" : "/login?next=/admin");
+        return;
+      }
+      if (user.role !== "ADMIN") {
+        setStatus("denied");
+        return;
+      }
+      wasOk.current = true;
+      setStatus("ok");
+    };
+
+    check();
+    const stopWatch = watchSessionExpiry();
+    const unsubscribe = onAuthChange(check);
+    return () => {
+      stopWatch();
+      unsubscribe();
+    };
   }, [router]);
 
   if (status === "checking") {

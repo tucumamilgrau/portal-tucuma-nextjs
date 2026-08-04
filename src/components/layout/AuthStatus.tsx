@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { AuthUser } from "@/lib/api";
-import { getStoredUser, clearSession, onAuthChange } from "@/lib/auth-client";
+import { getStoredUser, clearSession, onAuthChange, watchSessionExpiry } from "@/lib/auth-client";
 
 function initials(name: string) {
   return name.split(" ").slice(0, 2).map((p) => p[0]?.toUpperCase()).join("");
@@ -20,7 +20,12 @@ export default function AuthStatus() {
     // HTML do servidor (que não tem acesso ao localStorage) e evitar mismatch de hidratação.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setUser(getStoredUser());
-    return onAuthChange(() => setUser(getStoredUser()));
+    const stopWatch = watchSessionExpiry();
+    const unsubscribe = onAuthChange(() => setUser(getStoredUser()));
+    return () => {
+      stopWatch();
+      unsubscribe();
+    };
   }, []);
 
   if (!user) {
