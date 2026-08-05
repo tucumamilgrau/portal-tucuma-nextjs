@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     "Marabá notícias",
   ],
   manifest: "/manifest.json",
-  icons: { icon: "/icon.svg" },
+  icons: { icon: "/icon.png", apple: "/icon.png" },
   verification: {
     google: "eKtfcLpihMH2RLDFRBegZCYdFTW7pmqtfkZXlLwt_Cg",
   },
