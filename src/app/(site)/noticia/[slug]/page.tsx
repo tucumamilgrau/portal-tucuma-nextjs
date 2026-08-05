@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { FaInstagram, FaFacebookF } from "react-icons/fa6";
 import ImgPlaceholder from "@/components/ui/ImgPlaceholder";
 import Tag from "@/components/ui/Tag";
 import ArticleToc from "@/components/article/ArticleToc";
@@ -102,9 +103,24 @@ export default async function NoticiaPage({ params }: { params: Promise<{ slug: 
           </div>
           <div className="flex gap-2 ml-auto flex-wrap items-center">
             <ShareWhatsAppButton title={article.title} />
-            {["📘", "📸", "✈️", "✖️", "🧵", "💼"].map((i) => (
-              <a key={i} href="#" className="w-[34px] h-[34px] rounded-full bg-gray-100 flex items-center justify-center hover:bg-primary hover:text-white">{i}</a>
-            ))}
+            <a
+              href="https://www.instagram.com/tucumamilgrau2"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              className="w-[34px] h-[34px] rounded-full bg-gray-100 flex items-center justify-center hover:bg-primary hover:text-white"
+            >
+              <FaInstagram size={15} />
+            </a>
+            <a
+              href="https://www.facebook.com/tucumamilgrau"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              className="w-[34px] h-[34px] rounded-full bg-gray-100 flex items-center justify-center hover:bg-primary hover:text-white"
+            >
+              <FaFacebookF size={15} />
+            </a>
           </div>
         </div>
       </div>
